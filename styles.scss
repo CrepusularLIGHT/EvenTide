@@ -1,0 +1,46 @@
+$color1: red;
+$color2: orange;
+h1
+{
+	color: $color1;
+	text-align: center;
+}
+
+p
+{
+	color: red;
+}
+
+#left
+{
+	background-color: teal;
+	width: 10%;
+	height: 100%auto;
+	padding: 10px;
+	border: 3px dotted blue;
+}
+
+table
+{
+	border: 3px solid black;
+	width: 100%;
+	padding: 5%;
+	border-collapse: collapse;
+	margin: 0 auto;
+}
+
+td
+{
+	border: 1px solid black;
+	padding: 4px;
+	background-color: lightblue;
+	text-align: center;
+}
+
+.label
+{
+	font-weight: bold;
+	color: $color2;
+	font-family: monospace;
+	font-size: 120%;
+}
