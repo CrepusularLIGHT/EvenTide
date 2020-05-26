@@ -1,0 +1,126 @@
+.custom-transparent-box {
+  background-color: #ffffff;
+  opacity: 0.4;
+}
+
+.custom-overlay-text, .custom-br-text, .custom-tl-text-2, .custom-tl-text {
+  position: absolute;
+}
+
+body {
+  background-color: #f7f7f7;
+}
+
+#custom-home-image {
+  width: 100%;
+  height: auto;
+  min-width: 540px;
+}
+
+.custom-bg-downloads {
+  background-image: url("images/moab17.jpg");
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.custom-container {
+  min-height: 100%;
+  position: absolute;
+}
+
+.custom-transparent-box {
+  margin: 30px;
+}
+
+.custom-tl-text {
+  top: 5px;
+  left: 10px;
+}
+.custom-tl-text h3 {
+  color: #777777;
+}
+
+.custom-tl-text-2 {
+  top: 160px;
+  left: 10px;
+}
+.custom-tl-text-2 h3 {
+  color: #2F2F2F;
+}
+
+.custom-br-text {
+  right: 5px;
+  bottom: 0px;
+}
+.custom-br-text p {
+  font-size: 18px;
+  color: #c0c0c0;
+}
+
+.custom-overlay-text {
+  left: 20px;
+  top: 230px;
+}
+.custom-overlay-text p {
+  font-size: 18px;
+  color: #202020;
+}
+
+.custom-bg-images {
+  width: 100%;
+  height: auto;
+  min-width: 540px;
+  opacity: 0.4;
+}
+
+.custom-gallery-images {
+  width: 100%;
+  height: auto;
+}
+
+@media (min-width: 577px) {
+  .home-head-text::before {
+    content: " Home";
+  }
+
+  .bio-head-text::before {
+    content: " Bio";
+  }
+
+  .videos-head-text::before {
+    content: " Videos";
+  }
+
+  .gallery-head-text::before {
+    content: " Gallery";
+  }
+
+  .downloads-head-text::before {
+    content: " Downloads";
+  }
+}
+@media (max-width: 768px) {
+  #sidebar {
+    border-right: 3px;
+    background-color: #77757a;
+  }
+
+  .custom-links {
+    display: none;
+  }
+  .custom-links h5 {
+    color: #837787;
+  }
+
+  #nowPlaying {
+    display: none;
+  }
+
+  .custom-tl-text {
+    left: 20px;
+  }
+}
+
+/*# sourceMappingURL=style.css.map */

@@ -1,0 +1,147 @@
+$bgColor: #f7f7f7;
+$boxColor: #ffffff;
+$tlTextColor: #777777;
+$tlTextColor2: #2F2F2F;
+$brTextColor: #c0c0c0;
+$overlayTextColor: #202020;
+$sideBarBgColor: #77757a;
+$bgDownloadsImage: url('images/moab17.jpg');
+$playlistColor: #837787;
+
+%transparent-box {
+  background-color: $boxColor;
+  opacity: 0.4;
+}
+
+%overlay-text {
+  position: absolute;
+}
+
+body {
+  background-color: $bgColor;
+}
+
+#custom-home-image {
+  width:100%;
+  height:auto;
+  min-width:540px;
+}
+
+.custom-bg-downloads {
+  background-image: $bgDownloadsImage;
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.custom-container {
+  min-height: 100%;
+  position: absolute;
+}
+
+.custom-transparent-box {
+  @extend %transparent-box;
+  margin: 30px;
+}
+
+.custom-tl-text {
+  @extend %overlay-text;
+  top: 5px;
+  left: 10px;
+
+  h3 {
+    color: $tlTextColor;
+  }
+}
+
+.custom-tl-text-2 {
+  @extend %overlay-text;
+  top: 160px;
+  left: 10px;
+
+  h3 {
+    color: $tlTextColor2;
+  }
+}
+
+.custom-br-text {
+  @extend %overlay-text;
+  right: 5px;
+  bottom: 0px;
+
+  p {
+    font-size: 18px;
+    color: $brTextColor;
+  }
+}
+
+.custom-overlay-text {
+  @extend %overlay-text;
+  left: 20px;
+  top: 230px;
+
+  p {
+    font-size: 18px;
+    color: $overlayTextColor;
+  }
+}
+
+.custom-bg-images {
+  width:100%;
+  height:auto;
+  min-width:540px;
+  opacity:0.4;
+}
+
+.custom-gallery-images {
+  width:100%;
+  height:auto;
+}
+
+@media (min-width: 577px) {
+
+  .home-head-text::before {
+    content: " Home"
+  }
+
+  .bio-head-text::before {
+    content: " Bio"
+  }
+
+  .videos-head-text::before {
+    content: " Videos"
+  }
+
+  .gallery-head-text::before {
+    content: " Gallery"
+  }
+
+  .downloads-head-text::before {
+    content: " Downloads";
+  }
+}
+
+@media (max-width:768px) {
+
+  #sidebar {
+    border-right: 3px;
+    background-color: $sideBarBgColor;
+  }
+
+  .custom-links {
+    display: none;
+
+    h5{
+      color:$playlistColor;
+    }
+  }
+
+  #nowPlaying {
+    display: none;
+  }
+
+  .custom-tl-text {
+    left:20px;
+  }
+}
