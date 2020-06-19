@@ -1,0 +1,60 @@
+{% extends 'layout.html' %} {% block title %} Jangle Chat {% endblock title %} {% block body %}
+<div class="container">
+    <div class="row pt-3">
+        <div class="col">
+            <h2 class="text-center" id="heading">Jangle Chat</h3>
+        </div>
+    </div>
+    <div class="row pt-3">
+        <div class="col">
+            <h4 class="text-center">Welcome <b id="display_name"></b>!</h4>
+            <p id="local_storage"></p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col col-md-7 col-sm-7 col-7 px-3 mx-3">
+            <form>
+                <div class="form-group row">
+                    <label for="create_channel" class="col-form-label">Create Channel:</label>
+                    <input type="text" class="form-control" id="create_channel_name" name="create_channel" onkeypress="return event.keyCode != 13;">
+                </div>
+                <div class="form-group row">
+                    <button type="button" class="btn btn-info" id="create_channel_button">Create</button>
+                </div>
+            </form>
+            <div class="row">
+                <div class="col">
+                    <h5 class="pt-2 text-center text-warning lead" id="channel_name_heading"></h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col overflow-auto border border-warning shadow rounded" id="chat_box">
+                    <div class="p-2 overflow-auto">
+                        <p class="chat-box-text" id="chat_box_text"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <form action="">
+                        <div class="input-group shadow" id="chat_input">
+                            <input type="text" class="form-control" id="chat_input_text" name="chat_input_text" onkeypress="return event.keyCode != 13;">
+                            <div class="">
+                                <button type="button" class="btn btn-warning" id="chat_input_button" name="chat_input_button"><i class="fa fa-comment"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col col-md-4 col-sm-4 col-4 pl-3 pb-2 border border-info shadow rounded" id="channel_box">
+            <h5 class="pt-2">Channels:</h5>
+            <p id="test_channel_list"></p>
+            <div class="list-group" id="channel_list">
+                {% for channel in channels %}
+                <a href="#" class="list-group list-group-item-action text-info channel-select" name="{{channel}}">{{channel}}</a> {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}
