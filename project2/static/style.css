@@ -1,0 +1,22 @@
+#chat_box {
+    max-height: 300px;
+    height: auto;
+}
+
+.chat-box-text {
+    color: red;
+}
+
+#channel_box {
+    height: 100%;
+}
+
+.container {
+    min-height: 100%;
+    overflow: hidden;
+}
+
+html,
+body {
+    height: 100%;
+}
