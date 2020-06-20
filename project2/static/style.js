@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // User connected
     socket.on('user connected', (data) => {
-
+        
     });
 
     // Get displayName from previous session, or create new name

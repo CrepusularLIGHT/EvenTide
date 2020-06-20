@@ -58,7 +58,7 @@ def userConnect(data):
     users.append(newUser)
     for user in users:
         print (user.username, user.id)
-    emit('user connected', jsonify(users), broadcast=True)
+    emit('user connected', json.dumps(users), broadcast=True)
 
 # Create a channel
 @socketio.on("create channel")
