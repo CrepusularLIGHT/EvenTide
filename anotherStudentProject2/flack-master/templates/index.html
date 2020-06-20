@@ -1,0 +1,106 @@
+{% extends "layout.html" %}
+
+{% block title %} Chat {% endblock %}
+
+{% block main %}
+
+<div class="row">
+  <!-- LEFTBAR -->
+  <div class="leftbar col-4 border border-primary p-3 bg-primary text-white">
+    <!-- Name -->
+    <div class="username pb-4">
+      <h4>Name</h4>
+      <div class="row">
+        <form class="d-flex" ng-submit="setName()">
+          <input
+            type="text"
+            ng-model="name"
+            name="user"
+            id="user"
+            placeholder="Display Name"
+            class="mr-2">
+          <input type="submit" class="btn btn-outline-primary btn-sm" value="Save">
+        </form>
+      </div>
+    </div>
+    <!-- Channels -->
+    <div class="channels">
+      <h4>Channels</h4>
+      <div class="row">
+        <form class="mb-2 d-flex" ng-submit="createRoom()">
+          <input
+            type="text"
+            class="mr-2"
+            ng-model="new_room_name"
+            name="new_room_name"
+            id="new_room_name"
+            placeholder="New Channel Name">
+          <input
+          type="submit"
+          class="btn btn-sm btn-outline-primary"
+          value="Add"
+          ng-disabled="!name">
+        </form>
+      </div>
+      <ul>
+        <li
+          class="channel ml-2 pl-3"
+          ng-repeat="room in rooms"
+          ng-click="changeRoom(room)"
+          ng-class="{'current': room==current_room}"
+          ng-bind="room"
+        ></li>
+      </ul>
+    </div>
+    <!-- Users -->
+    <div class="roster">
+      <h4>Online</h4>
+      <ul>
+        <li
+          ng-repeat="user in roster track by $index"
+          ng-bind="user"
+          class="user pl-3 ml-2">:&nbsp;
+        </li>
+      </ul>
+    </div>
+  </div>
+
+   <!-- RIGHTBAR -->
+  <div class="rightbar col-8 border border-left-0 border-primary p-2">
+    <h2 class="active-channel"># <span ng-bind="current_room"></span></h2>
+    <!-- Messages -->
+    <div class="bg-light mb-2 p-2 rounded" id="msgpane">
+      <p ng-repeat="msg in messages track by $index">
+        <small class="text-muted mr-1" ng-bind="msg.stamp"></small>
+        <strong ng-bind="msg.name"></strong>:&nbsp;
+        <span ng-bind="msg.text" ng-style="msg.color"></span>
+      </p>
+    </div>
+
+    <!-- Message input -->
+    <div class="row">
+      <form class="message d-flex" ng-submit="send()">
+        <input
+          type="color"
+          id="msgCol"
+          name="msgCol"
+          value="#888888"
+          ng-model="color">
+        <input
+          class="flex-grow-1 mr-2"
+          type="text"
+          ng-model="text"
+          name="message"
+          id="message"
+          placeholder="Message">
+        <input
+          type="submit"
+          class="btn btn-primary"
+          value="Send"
+          ng-disabled="!name">
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

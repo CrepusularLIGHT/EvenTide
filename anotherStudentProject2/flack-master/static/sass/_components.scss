@@ -1,0 +1,60 @@
+leftbar h4 {
+  color: $grey-light;
+}
+
+h2.active-channel,
+h2.active-channel span {
+  text-transform: lowercase;
+  color: $primary;
+  font-size: 1.8rem;
+}
+
+li.channel {
+  position: relative;
+  text-transform: lowercase;
+  &.current {
+    font-weight: 900;
+  }
+  &::before {
+    content: '#';
+    position: absolute;
+    top: 5%;
+    left: 0;
+    font-weight: normal !important;
+  }
+  &:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+}
+
+li.user {
+  position: relative;
+  &::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: $grey-light;
+    position: absolute;
+    top: calc(50% - 3px);
+    left: 0;
+  }
+}
+
+#msgpane {
+  min-height: 40vh;
+  max-height: 50vh;
+  overflow: scroll;
+}
+
+form.message {
+  width: 100%;
+  input#message {
+    padding: 4px 0 4px 3px;
+  }
+}
+
+.hrow {
+  margin: 0 auto !important;
+}
