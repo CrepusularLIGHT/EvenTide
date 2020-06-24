@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelector('#create_channel_button').disabled = true;
         };
 
-        // Load channels
+        // Load channels (updates onclick for newly created channels)
         loadChannelList();
 
         // Chat input 
@@ -34,6 +34,24 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelector('#chat_input_text').value = '';
             document.querySelector('#chat_input_button').disabled = true;
         };
+
+        socket.on('disconnect', () => {
+            var userElement = document.querySelector(displayName);
+            userElement.remove();
+            console.log(displayName, "disconnected");
+        });
+    
+        socket.on('reconnect', () => {
+            var userElement = document.querySelector(displayName);
+            userElement.remove();
+            console.log(displayName, "reconnected");
+        });
+
+        socket.on('disconnecting', () => {
+            var userElement = document.querySelector(displayName);
+            userElement.remove();
+            console.log(displayName, "disconnecting");
+        });
     });
 
     // When new channel is created, add to channels list
@@ -74,7 +92,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // User connected
     socket.on('user connected', (data) => {
+        var usersList = document.querySelector('#user_list');
+        var users = data;
+        var newUser;
+        var i;
+        const userElement = document.createElement('li');
         
+        for (i=0; i < users.length; i++) {
+            newUser = users[i];
+        }
+        createUserHTML(userElement, newUser);
+        usersList.append(userElement);
+        console.log('New user connected:', newUser);
+
+        // for (i = 0; i < users.length; i++) {
+        //     const userElement = document.createElement('li');
+        //     user = users[i];
+        //     createUserHTML(userElement, user);
+        //     usersList.append(userElement);
+        // };
     });
 
     // Get displayName from previous session, or create new name
@@ -206,12 +242,19 @@ function createChannel() {
 }
 */
 
-// Adds html attributes for new channel
+// Adds HTML attributes for new channel
 function createChannelHTML(channel, name) {
     channel.setAttribute('href', '#');
     channel.setAttribute('class', 'list-group list-group-item-action text-info channel-select');
     channel.setAttribute('name', name);
     channel.innerHTML = name;
+};
+
+// Adds HTML attributes for new user
+function createUserHTML(element, name) {
+    element.setAttribute('class', 'text-danger');
+    element.setAttribute('name', name);
+    element.innerHTML = name;
 };
 
 // Opens chat room 
@@ -220,6 +263,10 @@ function openChatRoom(channel) {
     chatBox.style.display = "block";
     chatInput.style.display = "inline-flex";
     document.querySelector('#channel_name_heading').innerHTML = channel;
+    selectedChannel = channel;
+    document.querySelector('#chat_box_text').innerHTML = '';
+    socket.in(selectedChannel).emit('chat history', { 'channel name': selectedChannel });
+
 };
 
 function loadChannelList() {
@@ -227,11 +274,9 @@ function loadChannelList() {
         link.onclick = () => {
             const channelName = link.name;
             openChatRoom(channelName);
-            if (selectedChannel)
-                socket.leave(selectedChannel);
-            selectedChannel = channelName;
-            // socket.join(selectedChannel);
-            socket.to(channelName).emit('chat history', { 'channel name': selectedChannel });
         };
     });
+};
+
+function loadUserList() {
 };

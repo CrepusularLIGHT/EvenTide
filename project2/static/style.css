@@ -1,5 +1,5 @@
 #chat_box {
-    max-height: 300px;
+    min-height: 300px;
     height: auto;
 }
 
@@ -8,12 +8,16 @@
 }
 
 #channel_box {
-    height: 100%;
+    height: auto;
+}
+
+#user_list {
+    list-style-type: none;
+    padding-left: 0;
 }
 
 .container {
     min-height: 100%;
-    overflow: hidden;
 }
 
 html,

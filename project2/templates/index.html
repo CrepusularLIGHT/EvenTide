@@ -24,7 +24,7 @@
             </form>
             <div class="row">
                 <div class="col">
-                    <h5 class="pt-2 text-center text-warning lead" id="channel_name_heading"></h5>
+                    <h5 class="pt-2 text-center text-warning" id="channel_name_heading"></h5>
                 </div>
             </div>
             <div class="row">
@@ -36,7 +36,7 @@
             </div>
             <div class="row">
                 <div class="col">
-                    <form action="">
+                    <form>
                         <div class="input-group shadow" id="chat_input">
                             <input type="text" class="form-control" id="chat_input_text" name="chat_input_text" onkeypress="return event.keyCode != 13;">
                             <div class="">
@@ -47,12 +47,28 @@
                 </div>
             </div>
         </div>
-        <div class="col col-md-4 col-sm-4 col-4 pl-3 pb-2 border border-info shadow rounded" id="channel_box">
-            <h5 class="pt-2">Channels:</h5>
-            <p id="test_channel_list"></p>
-            <div class="list-group" id="channel_list">
-                {% for channel in channels %}
-                <a href="#" class="list-group list-group-item-action text-info channel-select" name="{{channel}}">{{channel}}</a> {% endfor %}
+        <div class="col col-md-4 col-sm-4 col-4">
+            <div class="row">
+                <div class="col pb-3 border border-info shadow rounded" id="channel_box">
+                    <h5 class="pt-2 text-info">Channels:</h5>
+                    <div class="list-group" id="channel_list">
+                        {% for channel in channels %}
+                        <a href="#" class="list-group list-group-item-action text-info channel-select" name="{{channel.name}}">{{channel.name}}</a> 
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="row pt-2">
+                <div class="col border border-danger shadow rounded" id="user_box">
+                    <h5 class="pt-2 text-danger">Users:</h5>
+                    <div class="list-group">
+                        <ul id="user_list">
+                            {% for user in users %}
+                            <li class="text-danger" name="{{user}}">{{user}}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
