@@ -29,29 +29,12 @@ document.addEventListener('DOMContentLoaded', () => {
         // Chat input 
         document.querySelector('#chat_input_button').onclick = () => {
             var chatInputText = document.querySelector('#chat_input_text').value;
-            socket.emit('chat input text', { 'chat text': chatInputText }, selectedChannel);
+            socket.emit('chat input text', chatInputText, displayName, selectedChannel);
             // Clear input field
             document.querySelector('#chat_input_text').value = '';
             document.querySelector('#chat_input_button').disabled = true;
         };
 
-        socket.on('disconnect', () => {
-            var userElement = document.querySelector(displayName);
-            userElement.remove();
-            console.log(displayName, "disconnected");
-        });
-    
-        socket.on('reconnect', () => {
-            var userElement = document.querySelector(displayName);
-            userElement.remove();
-            console.log(displayName, "reconnected");
-        });
-
-        socket.on('disconnecting', () => {
-            var userElement = document.querySelector(displayName);
-            userElement.remove();
-            console.log(displayName, "disconnecting");
-        });
     });
 
     // When new channel is created, add to channels list
@@ -87,7 +70,21 @@ document.addEventListener('DOMContentLoaded', () => {
         var chatBox = document.querySelector('#chat_box');
         var chatBoxText = document.querySelector('#chat_box_text');
         var chatHist = [];
-        chatBoxText.innerHTML = data;
+
+
+        const p = document.createElement('p');
+        const span_username = document.createElement('span');
+        const span_timestamp = document.createElement('span');
+
+        if (data.username != '') {
+            span_username.innerHTML = data.username + ": ";
+        } else {
+            span_username.innerHTML = '';
+        }
+    
+        span_timestamp.innerHTML = data.time + " >> ";
+        p.innerHTML = span_timestamp.outerHTML + span_username.outerHTML + data.message ;
+        chatBoxText.append(p);
     });
 
     // User connected
@@ -265,17 +262,30 @@ function openChatRoom(channel) {
     document.querySelector('#channel_name_heading').innerHTML = channel;
     selectedChannel = channel;
     document.querySelector('#chat_box_text').innerHTML = '';
-    socket.in(selectedChannel).emit('chat history', { 'channel name': selectedChannel });
-
+    socket.emit('chat history', selectedChannel);
 };
 
 function loadChannelList() {
     document.querySelectorAll('.channel-select').forEach(link => {
         link.onclick = () => {
             const channelName = link.name;
+            if (selectedChannel) {
+                leaveRoom(selectedChannel);
+            }
+            joinRoom(channelName);
             openChatRoom(channelName);
         };
     });
+};
+
+function joinRoom(channel) {
+    socket.emit('join', displayName, channel);
+    console.log("You joined", channel);
+};
+
+function leaveRoom(channel) {
+    socket.emit('leave', displayName, channel);
+    console.log("You left", channel);
 };
 
 function loadUserList() {

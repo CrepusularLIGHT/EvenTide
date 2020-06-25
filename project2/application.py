@@ -2,6 +2,7 @@ import os
 import sys
 import json
 
+from time import localtime, strftime
 from flask import Flask, render_template, jsonify, request, session
 from flask_socketio import SocketIO, emit, join_room, leave_room, send
 
@@ -22,8 +23,8 @@ class Channel:
         self.messages.append(message)
     
 
-class Messages:
-    def __init__(self, channel, message, user, time):
+class Message:
+    def __init__(self, message, user, channel, time):
         self.channel = channel
         self.message = message
         self.user = user
@@ -78,35 +79,69 @@ def createChannel(data):
 
 # Chat input text
 @socketio.on("chat input text")
-def chatInputText(data, room):
-    msgList = []
-    newChatText = data["chat text"]
-    print(data, room)
-    for channel in channels:
-        if (room == channel.name):
-            channel.newMessage(newChatText)
-            msgList = channel.messages
-            emit("display chat", msgList, broadcast=True)
+def chatInputText(msg, user, channel):
+    msgDict = {}
+    time = strftime('%b-%d %I:%M%p', localtime())
+    newMessage = Message(msg, user, channel, time)
+    for chan in channels:
+        if (channel == chan.name):
+            chan.newMessage(newMessage)
+            for message in chan.messages:
+                msgDict = {
+                    'message' : message.message,
+                    'username' : message.user,
+                    'channel' : message.channel,
+                    'time' : message.time
+                }
+            emit("display chat", msgDict, broadcast=True, room=channel)
+
 
 # Chat history
 @socketio.on("chat history")
-def chatHistory(data):
-    msgList = []
-    channelName = data["channel name"]
-    for channel in channels:
-        if (channelName == channel.name):
-            msgList = channel.messages
-            emit("display chat", msgList, broadcast=True)
+def chatHistory(channel):
+    msgDict = {}
+    for chan in channels:
+        if (channel == chan.name):
+            for message in chan.messages:
+                msgDict = {
+                    'message' : message.message,
+                    'username' : message.user,
+                    'channel' : message.channel,
+                    'time' : message.time
+                }
+                emit("display chat", msgDict, broadcast=False)
+            
 
 @socketio.on('join')
-def join(data):
-    join_room(data['room'])
-    send({'msg': data['username'] + " has joined the " + data['room'] + " room."},
-        room=data['room'])
+def join(user, channel):
+    join_room(channel)
+    msg = user + " has joined " + channel
+    time = strftime('%b-%d %I:%M%p', localtime())
+    newMessage = Message(msg, '', channel, time)
+
+    msgDict = {
+        'message' : msg,
+        'username' : '',
+        'channel' : channel,
+        'time' : time
+    }
+    emit("display chat", msgDict, broadcast=True, room=channel)
+
+
 
 @socketio.on('leave')
-def leave(data):
-    leave_room(data['room'])
-    send({'msg': data['username'] + " has left the " + data['room'] + " room."},
-        room=data['room'])
+def leave(user, channel):
+    leave_room(channel)
+    msg = user + " has left " + channel
+    time = strftime('%b-%d %I:%M%p', localtime())
+    newMessage = Message(msg, '', channel, time)
+    
+    msgDict = {
+        'message' : msg,
+        'username' : '',
+        'channel' : channel,
+        'time' : time
+    }
+    emit("display chat", msgDict, broadcast=True, room=channel)
+
 
