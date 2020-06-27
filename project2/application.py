@@ -43,49 +43,52 @@ users = []
 def index():
     return render_template("index.html", channels=channels, users=users)
 
-
-# @socketio.on('username', namespace='/private')
-# def recieve_username(username):
-#     users.append({username : request.sid})
-#     print(users)
-
+# When user connects to server
 @socketio.on("user connect") 
-def userConnect(data):
-    newUser = data["username"]
-    if (newUser not in users):
-        users.append(newUser)
-    for user in users:
-        print(user)
-    emit('user connected', users, broadcast=True)
+def userConnect(username):
+
+    # Check if username is taken
+    if (username in users):
+        error = "Username is already in use!"
+        emit('username taken', error)
+
+    # Prevent repeat names from storing in list of users
+    else:
+        users.append(username)
+        emit('user connected', {'users': users, 'user':username}, broadcast=True)
 
 # Create a channel
 @socketio.on("create channel")
-def createChannel(data):
-    # OUTPUT TEST
-    # print('Hello world!', file=sys.stderr)
-    channelList = []
-    newChannelName = data["channel name"]
-    newChannel = Channel(newChannelName)
+def createChannel(channel):
+    channelList = []        #Temporary list for channel names
+    newChannel = Channel(channel)       #Create channel as Channel Object
 
-    if any(channel.name == newChannel.name for channel in channels):
+    # Make sure channel name doesn't exist in existing channel list
+    # Append new channel to channel list
+    if any(chan.name == newChannel.name for chan in channels):
         error = "Channel name already exists!"
         emit("channel name taken", error, broadcast=False)
     else:
         channels.append(newChannel)
+        # Get all channels names to emit, store in temporary list
         for channel in channels:
-            print(channel.name)
             channelList.append(channel.name)
         emit("add new channel", channelList, broadcast=True)
 
 # Chat input text
+# Emits the most recent message in stored channel messages
 @socketio.on("chat input text")
 def chatInputText(msg, user, channel):
-    msgDict = {}
-    time = strftime('%b-%d %I:%M%p', localtime())
-    newMessage = Message(msg, user, channel, time)
+    msgDict = {}        # Temporary dictionary to store message
+    time = strftime('%H:%M:%S', localtime())        # Current time string
+    newMessage = Message(msg, user, channel, time)      # New Message Object
+
+    # For the current channel, get the most recent message
     for chan in channels:
         if (channel == chan.name):
+            # Append current message to Channel Object's Messages
             chan.newMessage(newMessage)
+            # Get the most recently added message to display
             for message in chan.messages:
                 msgDict = {
                     'message' : message.message,
@@ -95,11 +98,13 @@ def chatInputText(msg, user, channel):
                 }
             emit("display chat", msgDict, broadcast=True, room=channel)
 
-
 # Chat history
+# Emits the last (up to 100) messages stored for the current channel
 @socketio.on("chat history")
 def chatHistory(channel):
-    msgDict = {}
+    msgDict = {}        # Temporary dictionary to store message
+
+    # For the current channel, emit all messages
     for chan in channels:
         if (channel == chan.name):
             for message in chan.messages:
@@ -110,38 +115,69 @@ def chatHistory(channel):
                     'time' : message.time
                 }
                 emit("display chat", msgDict, broadcast=False)
-            
 
+# Join channel
+# Emits message to all users in current channel
 @socketio.on('join')
 def join(user, channel):
     join_room(channel)
-    msg = user + " has joined " + channel
-    time = strftime('%b-%d %I:%M%p', localtime())
-    newMessage = Message(msg, '', channel, time)
+    msg = user + " has joined " + channel       # Message displayed when user joins
+    time = strftime('%H:%M:%S', localtime())
 
-    msgDict = {
-        'message' : msg,
-        'username' : '',
-        'channel' : channel,
-        'time' : time
-    }
-    emit("display chat", msgDict, broadcast=True, room=channel)
+    # No username provided in object, but username is provided in 'msg'
+    # This allows JavaScript to see 'msgDict' as a join/leave message
+    # The join/leave message is not display the same way as a normal message
+    newMessage = Message(msg, '', channel, time) # Create Message Object 
+
+    # Store msg in channel message list
+    for chan in channels:
+        if (channel == chan.name):
+            # Append current message to Channel Object's Messages
+            chan.newMessage(newMessage)
+            # Get the most recently added message to display
+            for message in chan.messages:
+                msgDict = {
+                    'message' : message.message,
+                    'username' : message.user,
+                    'channel' : message.channel,
+                    'time' : message.time
+                }
+            emit("display chat", msgDict, broadcast=True, room=channel)
 
 
-
+# Leave channel
+# Emits message to all users in current channel
 @socketio.on('leave')
 def leave(user, channel):
     leave_room(channel)
-    msg = user + " has left " + channel
-    time = strftime('%b-%d %I:%M%p', localtime())
-    newMessage = Message(msg, '', channel, time)
-    
-    msgDict = {
-        'message' : msg,
-        'username' : '',
-        'channel' : channel,
-        'time' : time
-    }
-    emit("display chat", msgDict, broadcast=True, room=channel)
+    msg = user + " has left " + channel     # Message displayed when user leaves
+    time = strftime('%H:%M:%S', localtime())
 
+    # No username provided in object, but username is provided in 'msg'
+    # This allows JavaScript to see 'msgDict' as a join/leave message
+    # The join/leave message is not display the same way as a normal message
+    newMessage = Message(msg, '', channel, time) # Create Message Object
+
+    # Store msg in channel message list
+    for chan in channels:
+        if (channel == chan.name):
+            # Append current message to Channel Object's Messages
+            chan.newMessage(newMessage)
+            # Get the most recently added message to display
+            for message in chan.messages:
+                msgDict = {
+                    'message' : message.message,
+                    'username' : message.user,
+                    'channel' : message.channel,
+                    'time' : message.time
+                }
+            emit("display chat", msgDict, broadcast=True, room=channel)
+
+# Disconnected from server
+# Emits new user list that removes disconnected user
+@socketio.on('disconnected')
+def disconnected(user):
+    if (user in users):
+        users.remove(user)
+    emit('user disconnected', {'users': users, 'user':user}, broadcast=True)
 

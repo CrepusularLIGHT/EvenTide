@@ -1,10 +1,12 @@
 #chat_box {
-    min-height: 300px;
+    min-height: 100px;
     height: auto;
+    max-height: 300px;
 }
 
 .chat-box-text {
-    color: red;
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 
 #channel_box {
@@ -23,4 +25,30 @@
 html,
 body {
     height: 100%;
+}
+
+.timestamp {
+    color: gray;
+    font-size: 12px;
+}
+
+.username {
+    color: black;
+    font-weight: bold;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f0ad4e;
+}
+
+::-webkit-scrollbar-thumb {
+    background: gray;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: lightgray;
 }

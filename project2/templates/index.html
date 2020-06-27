@@ -27,23 +27,84 @@
                     <h5 class="pt-2 text-center text-warning" id="channel_name_heading"></h5>
                 </div>
             </div>
-            <div class="row">
-                <div class="col overflow-auto border border-warning shadow rounded" id="chat_box">
-                    <div class="p-2 overflow-auto">
-                        <p class="chat-box-text" id="chat_box_text"></p>
+
+            <div id="chat_box_window">
+                <div class="row">
+                    <div class="col overflow-auto border border-warning shadow rounded" id="chat_box">
+                        <div class="overflow-auto">
+                            <p class="chat-box-text" id="chat_box_text"></p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <form>
-                        <div class="input-group shadow" id="chat_input">
-                            <input type="text" class="form-control" id="chat_input_text" name="chat_input_text" onkeypress="return event.keyCode != 13;">
-                            <div class="">
-                                <button type="button" class="btn btn-warning" id="chat_input_button" name="chat_input_button"><i class="fa fa-comment"></i></button>
+                <div class="row">
+                    <div class="col px-0">
+                        <form>
+                            <div class="input-group" id="chat_input">
+                                <input type="text" class="form-control" id="chat_input_text" name="chat_input_text" onkeypress="return event.keyCode != 13;">
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-warning" id="chat_input_button" name="chat_input_button"><i class="fa fa-comment"></i></button>
+                                </div>
                             </div>
-                        </div>
-                    </form>
+                            <div class="btn-group">
+                                <div class="dropdown">
+                                    <button type="button" class="btn btn-outline-danger dropdown-toggle" id="userColor" data-toggle="dropdown">
+                                        Username color
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a href="#" class="dropdown-item text-warning username-color" data-value="text-warning">Amber</a>
+                                        <a href="#" class="dropdown-item text-danger username-color" data-value="text-danger">Red</a>
+                                        <a href="#" class="dropdown-item text-info username-color" data-value="text-info">Teal</a>
+                                        <a href="#" class="dropdown-item text-success username-color" data-value="text-success">Green</a>
+                                        <a href="#" class="dropdown-item text-secondary username-color" data-value="text-secondary">Grey</a>
+                                        <a href="#" class="dropdown-item text-dark username-color" data-value="text-dark">Black</a>
+                                        <a href="#" class="dropdown-item text-primary username-color" data-value="text-primary">Blue</a>
+                                    </div>
+                                </div>
+                                <div class="dropdown">
+                                    <button class="btn btn-outline-warning dropdown-toggle" type="button" id="def_text_color" data-toggle="dropdown">
+                                        Default text color
+                                    </button>
+                                    <div class="dropdown-menu" id="def_text_color_list">
+                                        <a href="#" class="dropdown-item text-warning def-text-color" data-value="text-warning">Amber</a>
+                                        <a href="#" class="dropdown-item text-danger def-text-color" data-value="text-danger">Red</a>
+                                        <a href="#" class="dropdown-item text-info def-text-color" data-value="text-info">Teal</a>
+                                        <a href="#" class="dropdown-item text-success def-text-color" data-value="text-success">Green</a>
+                                        <a href="#" class="dropdown-item text-secondary def-text-color" data-value="text-secondary">Grey</a>
+                                        <a href="#" class="dropdown-item text-dark def-text-color" data-value="text-dark">Black</a>
+                                        <a href="#" class="dropdown-item text-primary def-text-color" data-value="text-primary">Blue</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="btn-group">
+                                <div class="dropdown">
+                                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="text_style" data-toggle="dropdown">
+                                        Text style
+                                    </button>
+                                    <div class="dropdown-menu" id="text_style_list">
+                                        <a href="#" class="dropdown-item text-style" data-value="bold"><b>Bold</b></a>
+                                        <a href="#" class="dropdown-item text-style" data-value="italic"><i>Italics</i></a>
+                                        <a href="#" class="dropdown-item text-style" data-value="underline"><u>Underline</u></a>
+                                        <a href="#" class="dropdown-item text-style" data-value="heading">
+                                            <h4>BIG</h4>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="dropdown">
+                                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="text_color" data-toggle="dropdown">
+                                        Text color
+                                    </button>
+                                    <div class="dropdown-menu" id="text_color_list">
+                                        <a href="#" class="dropdown-item text-color" data-value="red" style="color:red">Red</a>
+                                        <a href="#" class="dropdown-item text-color" data-value="orange" style="color:orange">Orange</a>
+                                        <a href="#" class="dropdown-item text-color" data-value="yellow" style="color:yellow">Yellow</a>
+                                        <a href="#" class="dropdown-item text-color" data-value="green" style="color:green">Green</a>
+                                        <a href="#" class="dropdown-item text-color" data-value="blue" style="color:blue">Blue</a>
+                                        <a href="#" class="dropdown-item text-color" data-value="purple" style="color:purple">Purple</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -53,8 +114,7 @@
                     <h5 class="pt-2 text-info">Channels:</h5>
                     <div class="list-group" id="channel_list">
                         {% for channel in channels %}
-                        <a href="#" class="list-group list-group-item-action text-info channel-select" name="{{channel.name}}">{{channel.name}}</a> 
-                        {% endfor %}
+                        <a href="#" class="list-group list-group-item-action text-info channel-select" name="{{channel.name}}">{{channel.name}}</a> {% endfor %}
                     </div>
                 </div>
             </div>
