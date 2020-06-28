@@ -21,6 +21,7 @@ CrepusularLIGHT
     - Basic layout for rest of pages extend
   * _index.html_
     - Main page for chat 
+    
 **CSS file:** (located in folder > "static")
   * _style.css_
 
