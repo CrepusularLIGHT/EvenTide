@@ -75,7 +75,7 @@ def createChannel(channel):
             channelList.append(channel.name)
         emit("add new channel", channelList, broadcast=True)
 
-# Chat input text
+# Chat input text 
 # Emits the most recent message in stored channel messages
 @socketio.on("chat input text")
 def chatInputText(msg, user, channel):
